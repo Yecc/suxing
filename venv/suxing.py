@@ -12,7 +12,8 @@ def get_pages_id(page_num):
 def parser_pages(id_str):
     id_dict = json.loads(id_str)
     isend = id_dict['data']['pageEnd']
-
+    activity_id = id_dict['data']['mobileActivitys'][0]
+    print (activity_id)
     if isend:
         G.pageEnd = True
 def main():
