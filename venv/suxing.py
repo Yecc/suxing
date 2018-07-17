@@ -18,7 +18,7 @@ class G:
     activitysid_list = []
 
 def get_pages_id(page_num):
-    url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=2&sort=0&filter=0'
+    url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=1&sort=0&filter=0'
     r = requests.get(url, headers=G.headers)
     return r.text
 
