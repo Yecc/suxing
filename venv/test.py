@@ -26,7 +26,7 @@ def get_cookie():
 
     time.sleep(20)
     cookie = driver.get_cookies()
-    # driver.quit()
+    driver.quit()
     print (cookie)
     return cookie
 
