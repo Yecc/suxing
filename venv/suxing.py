@@ -22,7 +22,6 @@ class G:
 def get_pages_id(page_num):
     url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=1&sort=0&filter=0'
     r = G.s.get(url, headers=G.headers)
-    print (r.text)
     return r.text
 
 def parser_pages(id_str):
@@ -97,7 +96,6 @@ def get_cookie():
     time.sleep(20)
     cookie = driver.get_cookies()
     driver.quit()
-    print ('----------新cookie---------', cookie)
     return cookie
 
 def add_cookie(cookie):
