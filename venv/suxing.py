@@ -67,7 +67,6 @@ def branch_case(activityid):
     r = G.s.post(url, headers=G.headers, data=branch_data)
     print (r.text)
     choice_dict = json.loads(r.text)
-    # branch_id = choice_dict['data']['branchs'][0]['branchId']
     branchs = choice_dict['data']['branchs']
     combos = choice_dict['data']['combos']
 
