@@ -63,7 +63,7 @@ def branch_case(activityid):
         'activityId': activityid,
         'env': '1'
     }
-    r = requests.post(url, headers=G.headers, data=branch_data)
+    r = G.s.post(url, headers=G.headers, data=branch_data)
     print (r.text)
     branch_dict = json.loads(r.text)
     branch_id = branch_dict['data']['branchs'][0]['branchId']
@@ -72,13 +72,14 @@ def branch_case(activityid):
         'cx': None,
         'env': 1,
         'branchId': branch_id,
+        'comboId': 1,
         'offlineActivityId': activityid,
         'passCardNo': None,
         'phoneNo': '186****0270',
         'source': 'null',
         'uuid': None
     }
-    order_r = requests.post(order_url, headers=G.headers, data=order_data)
+    order_r = G.s.post(order_url, headers=G.headers, data=order_data)
     print (order_r.text)
 
 def get_cookie():
@@ -93,7 +94,7 @@ def get_cookie():
     driver.find_element_by_xpath('//*[@id="login-form"]/div/div/div[2]/input').send_keys('yangsu0110')
     driver.find_element_by_id('login-button').click()
 
-    time.sleep(20)
+    time.sleep(15)
     cookie = driver.get_cookies()
     driver.quit()
     return cookie
