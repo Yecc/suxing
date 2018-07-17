@@ -57,7 +57,7 @@ def order(activityid):
         branch_case(activityid)
 
 def branch_case(activityid):
-    print ('---------处理分店---------')
+    print ('---------处理选择---------')
     url = 'https://m.dianping.com/mobile/dinendish/apply/getPreApply'
     order_url = 'https://m.dianping.com/mobile/dinendish/apply/doApplyActivity'
     branch_data = {
@@ -66,20 +66,27 @@ def branch_case(activityid):
     }
     r = G.s.post(url, headers=G.headers, data=branch_data)
     print (r.text)
-    branch_dict = json.loads(r.text)
-    branch_id = branch_dict['data']['branchs'][0]['branchId']
+    choice_dict = json.loads(r.text)
+    # branch_id = choice_dict['data']['branchs'][0]['branchId']
+    branchs = choice_dict['data']['branchs']
+    combos = choice_dict['data']['combos']
+
 
     order_data = {
         'cx': None,
         'env': 1,
-        'branchId': branch_id,
-        'comboId': 1,
         'offlineActivityId': activityid,
         'passCardNo': None,
         'phoneNo': '186****0270',
         'source': 'null',
         'uuid': None
     }
+    if branchs:
+        # print ('-----选择分店-----')
+        order_data['branchId'] = branchs[0]['branchId']
+    if combos:
+        # print ('-----选择套餐-----')
+        order_data['comboId'] = combos[0]['comboId']
     order_r = G.s.post(order_url, headers=G.headers, data=order_data)
     print (order_r.text)
 

@@ -1,4 +1,4 @@
-import requests
-from config import *
+{"code":200,"data":{"offlineActivityId":1583126261,"mode":5,"type":1,"title":"【世界杯】驿亿尚品西餐(良乡店)双人餐/下午茶套餐免费抢","hasApplyedPhone":null,"hiddenPhoneNo":"136****3470","extraLimit":0,"activityStatus":1,"applyStatus":0,"dailyActivityExtraNum":null,"cityInfo":{"cityId":2,"cityName":"北京"},"shareInfo":{"shareTitle":"大众点评霸王餐：【世界杯】驿亿尚品西餐(良乡店)双人餐/下午茶套餐免费抢","shareUrl":"https://h5.dianping.com/app/app-community-free-meal/detail.html?offlineActivityId=1583126261&token=*&source=mShare&utm_source=mShare","sharePic":"https://p1.meituan.net/activityback/45f7b399c0e5445c1808964beceb9845124321.jpg%40100w_100h_1e_1c_1l%7Cwatermark%3D0","shareDesc":""},"branchs":[],"combos":[{"comboId":1,"comboName":"A：双人套餐"},{"comboId":2,"comboName":"B：双人下午茶繁星套餐"}],"postInfo":{"addressee":null},"passCards":null,"thresholdFaildMsgMap":null,"weddingDate":null,"babyBirth":null,"applyFormList":[{"applyItemId":1,"itemName":"手机号","isUpdateUC":false,"addTime":"2012-11-20T06:09:46.000Z","updateTime":"2012-11-20T06:09:46.000Z"},{"applyItemId":8,"itemName":"套餐","isUpdateUC":false,"addTime":"2014-07-08T12:40:17.000Z","updateTime":"2014-07-08T12:40:17.000Z"}],"customFormList":[null,null,null]},"msg":"成功"}
 
-print (ACCOUNT[0]['username'])
+'branchId': branch_id,
+        'comboId': 1,
