@@ -109,9 +109,9 @@ def add_cookie(cookie):
 
 
 def main():
-    for i in ACCOUNT:
-        print ('账号:', i['username'])
-        cookie = get_cookie(i['username'], i['password'])
+    for account_i in ACCOUNT:
+        print ('账号:', account_i['username'])
+        cookie = get_cookie(account_i['username'], account_i['password'])
         add_cookie(cookie)
         print ('---------cookie加载完成---------')
         for i in range(1, 10):
