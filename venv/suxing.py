@@ -1,11 +1,13 @@
 import requests
 import json
+from selenium import webdriver
+import time
+from config import *
 
 class G:
     pageEnd = False
     headers = {
         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-        'Cookie': '_lxsdk_cuid=161c5833a08c8-01effa25717221-326a7d04-13c680-161c5833a09c8; _lxsdk=161c5833a08c8-01effa25717221-326a7d04-13c680-161c5833a09c8; _hc.v=b03e110a-3a63-63bb-9cc7-b4f281bcc057.1519437168; ll=7fd06e815b796be3df069dec7836c3df; ua=%E7%99%BD%E7%8C%AB%E5%A4%A7%E4%BE%A0yecc; ctu=ea699dee96a1f9175dbf280cc9dc03d29c3387333a91cd8cea05f785d0fa67b6; s_ViewType=10; aburl=1; cy=2; cye=beijing; cityid=2; switchcityflashtoast=1; dper=984a7d02654b9ae7b44d068f11939febcefcd1513596a569d2e639b19a6984f8269bc9537597f1bcf9335ad7ccbb0c6918ce7724f60f43da4257e9a1dd37dc52afb70774881fefd6c183f985a34729aa1529f6cea520245e6cd1ca8223640132; logan_custom_report=; m_flash2=1; pvhistory=6L+U5ZuePjo8L3NzbmV3P2tleXdvcmQ9JUU5JTlDJUI4JUU3JThFJThCJUU5JUE0JTkwJl89MTUzMTcxMDE5NjQxNCZjYWxsYmFjaz1aZXB0bzE1MzE3MTAxNDgwMTc+OjwxNTMxNzEwMTk2NTIxXV9b; default_ab=index%3AA%3A1%7CshopList%3AA%3A1%7Cmyinfo%3AA%3A1; PHOENIX_ID=0a48418d-164a10b027c-bcde5; logan_session_token=cu6ap8n7znyt8s4iosfv; source=m_browser_test_4; _lx_utm=utm_source%3Dbwcbanner177; _lxsdk_s=%7C%7C0',
         'Host': 'm.dianping.com',
         'Referer': 'https://h5.dianping.com/app/app-community-free-meal/index.html',
         'Origin': 'https://h5.dianping.com',
@@ -16,10 +18,11 @@ class G:
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     activitysid_list = []
+    s = requests.session()
 
 def get_pages_id(page_num):
-    url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=2&sort=0&filter=0'
-    r = requests.get(url, headers=G.headers)
+    url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=1&sort=0&filter=0'
+    r = G.s.get(url, headers=G.headers)
     return r.text
 
 def parser_pages(id_str):
@@ -44,8 +47,9 @@ def order(activityid):
         'source': 'null',
         'uuid': None
     }
-    r = requests.post(url, headers=G.headers, data=order_data)
+    r = G.s.post(url, headers=G.headers, data=order_data)
     code_dict = json.loads(r.text)
+    print(r.text)
     branch_code = code_dict['data']['code']
     if branch_code == 200:
         print ('成功-',activityid)
@@ -53,37 +57,77 @@ def order(activityid):
         branch_case(activityid)
 
 def branch_case(activityid):
-    print ('---------处理分店---------')
+    print ('---------处理选择---------')
     url = 'https://m.dianping.com/mobile/dinendish/apply/getPreApply'
     order_url = 'https://m.dianping.com/mobile/dinendish/apply/doApplyActivity'
     branch_data = {
         'activityId': activityid,
         'env': '1'
     }
-    r = requests.post(url, headers=G.headers, data=branch_data)
+    r = G.s.post(url, headers=G.headers, data=branch_data)
     print (r.text)
-    branch_dict = json.loads(r.text)
-    branch_id = branch_dict['data']['branchs'][0]['branchId']
+    choice_dict = json.loads(r.text)
+    branchs = choice_dict['data']['branchs']
+    combos = choice_dict['data']['combos']
+
 
     order_data = {
         'cx': None,
         'env': 1,
-        'branchId': branch_id,
         'offlineActivityId': activityid,
         'passCardNo': None,
         'phoneNo': '186****0270',
         'source': 'null',
         'uuid': None
     }
-    order_r = requests.post(order_url, headers=G.headers, data=order_data)
+    if branchs:
+        # print ('-----选择分店-----')
+        order_data['branchId'] = branchs[0]['branchId']
+    if combos:
+        # print ('-----选择套餐-----')
+        order_data['comboId'] = combos[0]['comboId']
+    order_r = G.s.post(order_url, headers=G.headers, data=order_data)
     print (order_r.text)
 
-def main():
-    for i in range(1, 10):
-        parser_pages(get_pages_id(i))
-        if G.pageEnd:
-            break
+def get_cookie(username, password):
+    options = webdriver.ChromeOptions()
+    options.add_argument('lang=zh_CN.UTF-8')
+    options.add_argument('user-agent="Mozilla/5.0 (iPod; U; CPU iPhone OS 2_1 like Mac OS X; ja-jp) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5F137 Safari/525.20"')
 
-    for activitysid in G.activitysid_list:
-        order(activitysid)
-main()
+
+    driver = webdriver.Chrome(chrome_options=options)
+    driver.get("https://mlogin.dianping.com/login/password")
+    driver.find_element_by_xpath('//*[@id="login-form"]/div/div/div[1]/input').send_keys(username)
+    driver.find_element_by_xpath('//*[@id="login-form"]/div/div/div[2]/input').send_keys(password)
+    driver.find_element_by_id('login-button').click()
+
+    time.sleep(15)
+    cookie = driver.get_cookies()
+    driver.quit()
+    return cookie
+
+def add_cookie(cookie):
+    c = requests.cookies.RequestsCookieJar()
+    for i in cookie:
+        c.set(i["name"], i["value"])
+
+    G.s.cookies.update(c)
+
+
+def main():
+    for account_i in ACCOUNT:
+        print ('账号:', account_i['username'])
+        cookie = get_cookie(account_i['username'], account_i['password'])
+        add_cookie(cookie)
+        print ('---------cookie加载完成---------')
+        for i in range(1, 10):
+            parser_pages(get_pages_id(i))
+            if G.pageEnd:
+                break
+
+        for activitysid in G.activitysid_list:
+            order(activitysid)
+        G.activitysid_list = []
+
+if __name__ == '__main__':
+    main()
