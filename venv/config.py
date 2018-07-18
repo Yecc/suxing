@@ -6,9 +6,5 @@ ACCOUNT = [
     {
         'username': '13520868152',
         'password': 'dianpingmima1989'
-    },
-    {
-        'username': '13601073470',
-        'password': 'dianpingmima1989'
     }
 ]
