@@ -36,14 +36,14 @@ def parser_pages(id_str):
     if isend:
         G.pageEnd = True
 
-def order(activityid):
+def order(activityid,phone):
     url = 'https://m.dianping.com/mobile/dinendish/apply/doApplyActivity'
     order_data = {
         'cx': None,
         'env': 1,
         'offlineActivityId': activityid,
         'passCardNo': None,
-        'phoneNo': '186****0270',
+        'phoneNo': phone,
         'source': 'null',
         'uuid': None
     }
@@ -54,9 +54,9 @@ def order(activityid):
     if branch_code == 200:
         print ('成功-',activityid)
     if branch_code == 402:
-        branch_case(activityid)
+        branch_case(activityid, phone)
 
-def branch_case(activityid):
+def branch_case(activityid, phone):
     print ('---------处理选择---------')
     url = 'https://m.dianping.com/mobile/dinendish/apply/getPreApply'
     order_url = 'https://m.dianping.com/mobile/dinendish/apply/doApplyActivity'
@@ -76,7 +76,7 @@ def branch_case(activityid):
         'env': 1,
         'offlineActivityId': activityid,
         'passCardNo': None,
-        'phoneNo': '186****0270',
+        'phoneNo': phone,
         'source': 'null',
         'uuid': None
     }
@@ -126,7 +126,7 @@ def main():
                 break
 
         for activitysid in G.activitysid_list:
-            order(activitysid)
+            order(activitysid, account_i['phone'])
         G.activitysid_list = []
 
 if __name__ == '__main__':
