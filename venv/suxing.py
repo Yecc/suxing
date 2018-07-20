@@ -21,8 +21,10 @@ class G:
     s = requests.session()
 
 def get_pages_id(page_num):
-    url = 'https://m.dianping.com/activity/static/list?page='+ str(page_num) +'&cityid=2&regionParentId=0&regionId=0&type=1&sort=0&filter=0'
-    r = G.s.get(url, headers=G.headers)
+    payload = URL_PAYLOAD
+    payload['page'] = page_num
+    url = 'https://m.dianping.com/activity/static/list'
+    r = G.s.get(url, headers=G.headers, params=payload)
     return r.text
 
 def parser_pages(id_str):
