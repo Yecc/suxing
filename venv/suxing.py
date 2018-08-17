@@ -105,7 +105,7 @@ def get_cookie(username, password):
     driver.find_element_by_xpath('//*[@id="login-form"]/div/div/div[2]/input').send_keys(password)
     driver.find_element_by_id('login-button').click()
 
-    # time.sleep(8)
+    time.sleep(5)
     WebDriverWait(driver, 20, 1).until(EC.title_is('北京美食,北京餐厅餐饮,北京团购,北京生活,优惠券-大众点评网'))
     cookie = driver.get_cookies()
     driver.quit()
